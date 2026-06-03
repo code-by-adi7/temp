@@ -123,7 +123,7 @@ export default function HeroSection() {
         paddingTop: "12rem",
         paddingBottom: "6rem",
         overflow: "clip",
-        backgroundColor: "#2b2929ff",
+        backgroundColor: "#252524e1",
       }}
     >
       {/* ── z0: Dot grid ── */}
@@ -150,11 +150,11 @@ export default function HeroSection() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
         style={{
-          y: charY,
-          position: "absolute",
+          position: "fixed",
+          top: 0,
           right: 0,
           bottom: 0,
-          height: "100%",
+          height: "100vh",
           width: "clamp(280px, 45vw, 680px)",
           zIndex: 1,
           /* gradient mask: fades left edge into transparent */

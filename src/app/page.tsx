@@ -52,11 +52,13 @@ export default function Home() {
           <ScrollProgress />
           <Navbar />
           <HeroSection />
-          <MarqueeTicker />
-          <VideoSection />
-          <AboutSection />
-          <ContactSection />
-          <Footer />
+          <div style={{ position: "relative", zIndex: 10, backgroundColor: "#080808" }}>
+            <MarqueeTicker />
+            <VideoSection />
+            <AboutSection />
+            <ContactSection />
+            <Footer />
+          </div>
         </>
       )}
     </main>
