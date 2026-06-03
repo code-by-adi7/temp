@@ -123,7 +123,7 @@ export default function HeroSection() {
         paddingTop: "12rem",
         paddingBottom: "6rem",
         overflow: "clip",
-        backgroundColor: "#000000ff",
+        backgroundColor: "#2b2929ff",
       }}
     >
       {/* ── z0: Dot grid ── */}

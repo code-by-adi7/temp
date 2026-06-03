@@ -29,7 +29,7 @@ function VideoCard({ video, index }: { video: Video; index: number }) {
     >
       {/* Thumbnail */}
       <a
-        href={`https://youtu.be/Xnxnon_iQeM?si=CQ_Q2sDFE_yFPoNa`}
+        href={`https://youtu.be/${video.youtubeId}`}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Watch ${video.title}`}
