@@ -251,10 +251,10 @@ html {
     --site-gutter: 1.25rem;
   }
 
-  /* Hero: full viewport height, stretch so content can fill vertically */
+  /* Hero: full viewport height, stretch so content stays at top */
   #hero {
     padding-top: 5rem  !important;
-    padding-bottom: 2.5rem !important;
+    padding-bottom: 2rem !important;
     align-items: stretch !important;
     min-height: 100svh !important;
   }
@@ -269,19 +269,40 @@ html {
   
   .hero-main-content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* Push buttons and body to the bottom */
+  /* Headline: less top margin on mobile */
+  .hero-main-content > [aria-label="Crafting Bold Stories"] {
+    margin-top: 1rem !important;
+  }
+
+  /* Push buttons to the bottom of the screen */
   .hero-buttons-row {
-    margin-top: auto;
+    margin-top: auto !important; 
   }
 
-  /* Stats hidden in hero on mobile — they appear too low */
-  .hero-stats {
-    display: none !important;
+  /* Restored standard mobile positioning for image */
+  .hero-char {
+    position: absolute !important;
+    left:   0    !important;   
+    right:  0    !important;
+    top:    0    !important;   /* anchor to top of section */
+    bottom: auto !important;
+    height: 100svh !important; /* span exactly the first viewport height */
+    width:  100% !important;
+    /* No side-fade mask needed — image is centered */
+    -webkit-mask-image: none !important;
+    mask-image:         none !important;
   }
 
-  /* Headline: less top margin on mobile, increase font size */
+  .hero-char img {
+    position: absolute !important;
+    bottom: 0 !important; /* image sits exactly at the bottom of the first 100svh screen */
+    height: 65% !important;
+    object-position: bottom center !important;  
+  }
   .hero-main-content > [aria-label="Crafting Bold Stories"] {
     margin-top: 1rem !important;
   }
@@ -431,22 +452,4 @@ html {
   border-radius: 4px;
 }
 
-/* ── Hero character image — mobile: bottom center ── */
-@media (max-width: 639px) {
-  .hero-char {
-    left:   0    !important;   /* span full width */
-    right:  0    !important;
-    bottom: 0    !important;   /* pin to bottom of hero */
-    top:    auto !important;
-    height: 65%  !important;
-    width:  100% !important;
-    /* No side-fade mask needed — image is centered */
-    -webkit-mask-image: none !important;
-    mask-image:         none !important;
-  }
-
-  .hero-char img {
-    object-position: bottom center !important;  /* person centered */
-  }
-}
 

@@ -29,7 +29,7 @@ const fadeUp = {
 };
 
 /* ─── Animated counter ─── */
-function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
+export function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   const nodeRef = useRef<HTMLSpanElement>(null);
   const started = useRef(false);
@@ -122,7 +122,7 @@ export default function HeroSection() {
         alignItems: "center",
         paddingTop: "12rem",
         paddingBottom: "6rem",
-        overflow: "hidden",
+        overflow: "clip",
         backgroundColor: "#000000ff",
       }}
     >
@@ -145,8 +145,10 @@ export default function HeroSection() {
 
       {/* ── z1: mn.png character — right side ── */}
       <motion.div
-        aria-hidden
         className="hero-char"
+        initial={{ opacity: 0, x: 60 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
         style={{
           y: charY,
           position: "absolute",
@@ -154,17 +156,19 @@ export default function HeroSection() {
           bottom: 0,
           height: "100%",
           width: "clamp(280px, 45vw, 680px)",
-          pointerEvents: "none",
           zIndex: 1,
           /* gradient mask: fades left edge into transparent */
           WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 28%)",
           maskImage: "linear-gradient(to right, transparent 0%, black 28%)",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <motion.img
           src="/mn.png"
           alt="Sanu Siril"
+          animate={{ y: [0, -12, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          whileHover={{ scale: 1.04, filter: "brightness(1.1) drop-shadow(0px 10px 30px rgba(232,197,71,0.2))" }}
+          whileTap={{ scale: 0.98 }}
           style={{
             height: "100%",
             width: "100%",
@@ -173,7 +177,9 @@ export default function HeroSection() {
             display: "block",
             userSelect: "none",
             WebkitUserDrag: "none",
-          } as React.CSSProperties}
+            cursor: "pointer",
+            originY: 1, // scale from the bottom so feet stay planted
+          } as any}
         />
       </motion.div>
 
@@ -201,34 +207,8 @@ export default function HeroSection() {
             style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}
             className="hero-main-content"
           >
-            {/* Label pill */}
-            <motion.div variants={fadeUp}>
-              <motion.div
-                whileHover={{ scale: 1.05, borderColor: "#e8c547" }}
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: "0.5rem",
-                  border: "1px solid #2a2a2a", borderRadius: "9999px",
-                  padding: "0.4rem 1rem",
-                  backgroundColor: "rgba(232,197,71,0.06)",
-                  cursor: "default", transition: "border-color 0.3s",
-                }}
-              >
-                <motion.div
-                  animate={{ rotate: [0, 18, -18, 0] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-
-                </motion.div>
-                <span style={{
-                  fontFamily: "var(--font-dm-mono), monospace",
-                  fontSize: "clamp(8px, 1.5vw, 10px)",
-                  letterSpacing: "0.22em",
-                  textTransform: "uppercase", color: "#e8c547",
-                }}>
-
-                </span>
-              </motion.div>
-            </motion.div>
+            {/* Label pill removed per user request, empty div preserves animation stagger index */}
+            <motion.div variants={fadeUp} style={{ display: "none" }} />
 
             {/* ── MEGA HEADLINE — full width ── */}
             <div aria-label="Crafting Bold Stories" style={{ display: "flex", flexDirection: "column", marginTop: "3.5rem" }}>
@@ -241,7 +221,7 @@ export default function HeroSection() {
                   SIRIL
                 </motion.span>
               </div>
-              <div style={{ overflow: "hidden" }}>
+              <div style={{ overflow: "hidden", paddingBottom: "4.5rem" }}>
                 <motion.span variants={lineVariants} className="text-mega" style={{
                   fontFamily: "var(--font-antonio), sans-serif",
                   fontWeight: 900, textTransform: "uppercase",

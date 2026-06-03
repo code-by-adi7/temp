@@ -56,7 +56,7 @@ export default function RootLayout({
       <body
         className="overflow-x-hidden"
         style={{
-          backgroundColor: "#080808",
+          backgroundColor: "#000000ff",
           color: "#a8a8a8",
           fontFamily: "var(--font-dm-sans), sans-serif",
           WebkitFontSmoothing: "antialiased",

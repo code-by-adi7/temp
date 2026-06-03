@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Play, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { videos, type Video } from "@/data/videos";
+import { Counter } from "@/components/HeroSection";
 
 function VideoCard({ video, index }: { video: Video; index: number }) {
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -434,6 +435,69 @@ export default function VideoSection() {
           backgroundColor: "#1f1f1f",
         }}
       />
+
+      {/* ── MOBILE STATS (below work section) ── */}
+      <div className="site-container block sm:hidden" style={{ marginTop: "4rem" }}>
+        {/* Divider above stats */}
+        <div style={{ width: "100%", height: "1px", backgroundColor: "#1f1f1f", marginBottom: "2.5rem" }} />
+        
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)", /* Linear row / not stacked */
+            gap: "clamp(0.5rem, 2vw, 1.5rem)",
+          }}
+        >
+          {[
+            { target: 200, suffix: "+", label: "Subscribers" },
+            { target: 500, suffix: "k+", label: "Total Views" },
+            { target: 50, suffix: "+", label: "Videos Made" },
+          ].map(({ target, suffix, label }, i) => (
+            <motion.div
+              key={label}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.4rem",
+                cursor: "default",
+                paddingRight: i < 2 ? "clamp(0.5rem, 2vw, 1.5rem)" : 0,
+                borderRight: i < 2 ? "1px solid #1f1f1f" : "none",
+                textAlign: "center", /* align content evenly for mobile */
+              }}
+            >
+              {/* Big number */}
+              <span
+                style={{
+                  fontFamily: "var(--font-antonio), sans-serif",
+                  fontSize: "clamp(2rem, 8vw, 3.5rem)",
+                  fontWeight: 700,
+                  color: "#ffffff",
+                  lineHeight: 1,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                <Counter target={target} suffix={suffix} />
+              </span>
+              {/* Label */}
+              <span
+                style={{
+                  fontFamily: "var(--font-dm-mono), monospace",
+                  fontSize: "clamp(8px, 2vw, 10px)",
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  color: "#6b6b6b",
+                }}
+              >
+                {label}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
