@@ -61,6 +61,9 @@ const RENDER_FS = /* glsl */ `
   uniform sampler2D u_height;
   uniform vec2      u_px;
 
+  uniform sampler2D u_bg;
+  uniform vec4      u_imgRect; // left, bottom, width, height
+
   float un(float x) { return x * 2.0 - 1.0; }
 
   void main() {
@@ -72,12 +75,25 @@ const RENDER_FS = /* glsl */ `
     float activity = abs(h);
     float alpha    = smoothstep(0.008, 0.07, activity) * 0.75;
 
-    // Gold accent: #e8c547
     vec3 gold  = vec3(0.910, 0.773, 0.278);
     vec3 dark  = vec3(0.032, 0.032, 0.032);
     vec3 color = gold * spec + dark * shadow;
 
-    gl_FragColor = vec4(color, alpha);
+    // Reveal image at ripple area
+    float reveal = smoothstep(0.002, 0.06, activity);
+
+    vec2 bgUv = (v_uv - u_imgRect.xy) / u_imgRect.zw;
+    vec4 bg = vec4(0.0);
+    if (bgUv.x >= 0.0 && bgUv.x <= 1.0 && bgUv.y >= 0.0 && bgUv.y <= 1.0) {
+      bg = texture2D(u_bg, bgUv);
+      // CSS mask: linear-gradient(to right, transparent 0%, black 28%)
+      bg.a *= smoothstep(0.0, 0.28, bgUv.x);
+    }
+
+    vec3 finalColor = mix(color, bg.rgb, reveal * bg.a);
+    float finalAlpha = max(alpha, reveal * bg.a);
+
+    gl_FragColor = vec4(finalColor, finalAlpha);
   }
 `;
 
@@ -99,6 +115,26 @@ function mkProgram(gl: WebGLRenderingContext, vs: string, fs: string) {
   gl.attachShader(p, compile(gl, gl.FRAGMENT_SHADER, fs));
   gl.linkProgram(p);
   return p;
+}
+
+function loadTexture(gl: WebGLRenderingContext, url: string, onLoaded?: (w: number, h: number) => void) {
+  const tex = gl.createTexture()!;
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0,0,0,0]));
+  const img = new Image();
+  img.src = url;
+  img.crossOrigin = "anonymous";
+  img.onload = () => {
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    if (onLoaded) onLoaded(img.width, img.height);
+  };
+  return tex;
 }
 
 function mkTex(gl: WebGLRenderingContext, w: number, h: number) {
@@ -162,9 +198,16 @@ export default function WaterRippleCanvas() {
       splash: gl.getUniformLocation(simProg, "u_splash"),
     };
     const rU = {
-      height: gl.getUniformLocation(renProg, "u_height"),
-      px: gl.getUniformLocation(renProg, "u_px"),
+      height:  gl.getUniformLocation(renProg, "u_height"),
+      px:      gl.getUniformLocation(renProg, "u_px"),
+      bg:      gl.getUniformLocation(renProg, "u_bg"),
+      imgRect: gl.getUniformLocation(renProg, "u_imgRect"),
     };
+
+    let imgW = 1, imgH = 1;
+    const bgTex = loadTexture(gl, "/rl.png", (w, h) => {
+      imgW = w; imgH = h;
+    });
 
     /* ping-pong state */
     const SIM_SCALE = 3; // simulate at 1/3 res for performance
@@ -277,6 +320,52 @@ export default function WaterRippleCanvas() {
       const htTex = texs[nextIdx];
       gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, htTex); gl.uniform1i(rU.height, 0);
       gl.uniform2f(rU.px, 1 / simW, 1 / simH);
+
+      // Character image tracking (sync perfectly with the actual DOM element)
+      const rect = canvas.getBoundingClientRect();
+      
+      let charW = 280;
+      let charH = ch;
+      let charTop = 0;
+      let charLeft = 0;
+
+      const charEl = document.querySelector(".hero-char");
+      if (charEl) {
+        const charRect = charEl.getBoundingClientRect();
+        charW = charRect.width;
+        charH = charRect.height;
+        charTop = charRect.top;
+        charLeft = charRect.left;
+      }
+
+      const boxAspect = charW / charH;
+      const imgAspect = imgW / imgH;
+      
+      let drawW, drawH;
+      if (boxAspect > imgAspect) {
+        drawH = charH;
+        drawW = charH * imgAspect;
+      } else {
+        drawW = charW;
+        drawH = charW / imgAspect;
+      }
+
+      // Position the drawn image at the bottom right of the charRect box
+      const imgWinLeft = charLeft + charW - drawW;
+      const imgWinBottom = charTop + charH;
+
+      // Convert fixed window coordinates to absolute WebGL canvas coordinates
+      const canvasBoxLeft = imgWinLeft - rect.left;
+      const canvasBoxBottom = rect.bottom - imgWinBottom;
+      
+      const left = canvasBoxLeft / cw;
+      const bottom = canvasBoxBottom / ch;
+      const width = drawW / cw;
+      const height = drawH / ch;
+
+      gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, bgTex); gl.uniform1i(rU.bg, 1);
+      gl.uniform4f(rU.imgRect, left, bottom, width, height);
+
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
 
@@ -291,6 +380,7 @@ export default function WaterRippleCanvas() {
       gl.deleteProgram(simProg);
       gl.deleteProgram(renProg);
       gl.deleteBuffer(quad);
+      gl.deleteTexture(bgTex);
       texs.forEach(t => gl.deleteTexture(t));
       fbos.forEach(f => gl.deleteFramebuffer(f));
     };
@@ -300,13 +390,15 @@ export default function WaterRippleCanvas() {
     <canvas
       ref={canvasRef}
       style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
         display: "block",
         touchAction: "none",
         pointerEvents: "none",
+        zIndex: 2,
       }}
       aria-hidden="true"
     />

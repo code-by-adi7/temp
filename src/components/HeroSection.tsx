@@ -115,17 +115,26 @@ export default function HeroSection() {
     <section
       id="hero"
       ref={sectionRef}
+      className="hero-section"
       style={{
         position: "relative",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        paddingTop: "12rem",
-        paddingBottom: "6rem",
-        overflow: "clip",
         backgroundColor: "#161616ff",
       }}
     >
+      <div
+        className="hero-sticky-wrapper"
+        style={{
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          paddingTop: "12rem",
+          paddingBottom: "6rem",
+          overflow: "clip",
+        }}
+      >
       {/* ── z0: Dot grid ── */}
       <motion.div
         aria-hidden
@@ -165,10 +174,6 @@ export default function HeroSection() {
         <motion.img
           src="/mn.png"
           alt="Sanu Siril"
-          animate={{ y: [0, -12, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          whileHover={{ scale: 1.04, filter: "brightness(1.1) drop-shadow(0px 10px 30px rgba(232,197,71,0.2))" }}
-          whileTap={{ scale: 0.98 }}
           style={{
             height: "100%",
             width: "100%",
@@ -177,32 +182,33 @@ export default function HeroSection() {
             display: "block",
             userSelect: "none",
             WebkitUserDrag: "none",
-            cursor: "pointer",
             originY: 1, // scale from the bottom so feet stay planted
           } as any}
         />
       </motion.div>
 
-      {/* ── z2: Edge vignettes (left & top) ── */}
+      {/* ── z3: Edge vignettes (left & top) ── */}
       <div aria-hidden style={{
-        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 2,
+        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 3,
         background: "linear-gradient(to right, rgba(8,8,8,0.5) 0%, transparent 45%)",
       }} />
       <div aria-hidden style={{
         position: "absolute", top: 0, left: 0, right: 0, height: "200px",
         background: "linear-gradient(to bottom, rgba(8,8,8,0.6), transparent)",
-        pointerEvents: "none", zIndex: 2,
+        pointerEvents: "none", zIndex: 3,
       }} />
       <div aria-hidden style={{
         position: "absolute", bottom: 0, left: 0, right: 0, height: "250px",
         background: "linear-gradient(to top, rgba(8,8,8,0.9), transparent)",
-        pointerEvents: "none", zIndex: 2,
+        pointerEvents: "none", zIndex: 3,
       }} />
 
-      {/* ── MAIN CONTENT ── */}
-      <motion.div
+      {/* ── MAIN CONTENT (Interleaved Layers) ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", width: "100%" }}>
+        {/* ── BACK LAYER (SIRIL) ── */}
+        <motion.div
         className="hero-content-wrapper"
-        style={{ y: contentY, opacity: fadeOut, width: "100%", position: "relative", zIndex: 2 }}
+        style={{ y: contentY, opacity: fadeOut, width: "100%", gridArea: "1/1", zIndex: 0, pointerEvents: "none" }}
       >
         <div className="site-container hero-site-container">
           <motion.div
@@ -221,6 +227,196 @@ export default function HeroSection() {
                 <motion.span variants={lineVariants} className="text-mega" style={{
                   fontFamily: "var(--font-antonio), sans-serif",
                   fontWeight: 900, color: "#ffffff",
+                  textTransform: "uppercase", display: "block",
+                }}>
+                  SIRIL
+                </motion.span>
+              </div>
+              <div style={{ overflow: "hidden", paddingBottom: "4.5rem" }}>
+                <motion.span variants={lineVariants} className="text-mega" style={{
+                  fontFamily: "var(--font-antonio), sans-serif",
+                  fontWeight: 900, textTransform: "uppercase",
+                  display: "block",
+                  WebkitTextStroke: "1.5px #ffffff",
+                  color: "transparent", visibility: "hidden",
+                }}>
+                  VLOGS
+                </motion.span>
+              </div>
+              <div style={{ overflow: "hidden" }}>
+                <motion.span variants={lineVariants} className="text-mega" style={{
+                  fontFamily: "var(--font-antonio), sans-serif",
+                  fontWeight: 700, color: "#e8c547",
+                  textTransform: "uppercase", display: "block",
+                }}>
+
+                </motion.span>
+              </div>
+            </div>
+
+            {/* ── BODY + BUTTONS row ── */}
+            <motion.div
+              variants={fadeUp}
+              className="hero-buttons-row" style={{ visibility: "hidden", pointerEvents: "none",
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "flex-start",
+                justifyContent: "space-between",
+                gap: "2rem",
+              }}
+            >
+              {/* Body copy restored with punchy text */}
+              <p style={{
+                color: "#a8a8a8",
+                fontFamily: "var(--font-dm-mono), monospace",
+                fontSize: "clamp(10px, 1.8vw, 12px)",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                lineHeight: 1.75,
+                maxWidth: "20rem",
+                margin: 0,
+                flex: "1 1 260px",
+              }}>
+                Capturing raw moments, cinematic stories, and the beauty of the unknown.
+              </p>
+
+              {/* CTA Buttons */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center", flex: "0 0 auto" }}>
+                <motion.a
+                  ref={mag1.ref}
+                  href="#videos"
+                  style={{
+                    x: mag1.x, y: mag1.y,
+                    display: "flex", alignItems: "center", gap: "0.625rem",
+                    backgroundColor: "#e8c547", color: "#080808",
+                    fontFamily: "var(--font-dm-mono), monospace",
+                    fontSize: "clamp(9px, 1.5vw, 11px)",
+                    letterSpacing: "0.15em", textTransform: "uppercase",
+                    padding: "clamp(0.75rem, 1.5vw, 1rem) clamp(1.25rem, 2.5vw, 1.875rem)",
+                    borderRadius: "9999px", fontWeight: 600, textDecoration: "none",
+                  }}
+                  whileHover={{ scale: 1.05, boxShadow: "0 0 32px rgba(232,197,71,0.45)" }}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  <Play size={13} fill="#080808" color="#080808" />
+                  Watch Latest
+                </motion.a>
+
+                <motion.a
+                  ref={mag2.ref}
+                  href="https://youtube.com/@sanusiril"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    x: mag2.x, y: mag2.y,
+                    display: "flex", alignItems: "center", gap: "0.5rem",
+                    border: "1px solid #2a2a2a", color: "#f0f0f0",
+                    fontFamily: "var(--font-dm-mono), monospace",
+                    fontSize: "clamp(9px, 1.5vw, 11px)",
+                    letterSpacing: "0.15em", textTransform: "uppercase",
+                    padding: "clamp(0.75rem, 1.5vw, 1rem) clamp(1.25rem, 2.5vw, 1.875rem)",
+                    borderRadius: "9999px", textDecoration: "none",
+                    transition: "border-color 0.2s, color 0.2s",
+                  }}
+                  whileHover={{ borderColor: "#e8c547", color: "#ffffff", scale: 1.03 }}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  My Channel <ArrowRight size={13} />
+                </motion.a>
+              </div>
+            </motion.div>
+
+            {/* ── STATS — hidden on mobile, shown on sm+ ── */}
+            <motion.div variants={fadeUp} className="hero-stats hidden sm:block" style={{ visibility: "hidden" }}>
+              {/* Divider */}
+              <div style={{ width: "100%", height: "1px", backgroundColor: "#1f1f1f", marginBottom: "2.5rem" }} />
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "clamp(1rem, 4vw, 3rem)",
+                }}
+                className="hero-stats-grid"
+              >
+                {stats.map(({ target, suffix, label }, i) => (
+                  <motion.div
+                    key={label}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 + i * 0.12, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    whileHover={{ y: -6 }}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.4rem",
+                      cursor: "default",
+                      paddingRight: i < 2 ? "clamp(1rem, 4vw, 3rem)" : 0,
+                      borderRight: i < 2 ? "1px solid #1f1f1f" : "none",
+                    }}
+                  >
+                    {/* Big number */}
+                    <span
+                      style={{
+                        fontFamily: "var(--font-antonio), sans-serif",
+                        fontSize: "clamp(3.5rem, 8vw, 7rem)",
+                        fontWeight: 700,
+                        color: "#ffffff",
+                        lineHeight: 1,
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      <Counter target={target} suffix={suffix} />
+                    </span>
+                    {/* Label */}
+                    <span
+                      style={{
+                        fontFamily: "var(--font-dm-mono), monospace",
+                        fontSize: "clamp(9px, 1.2vw, 11px)",
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: "#6b6b6b",
+                      }}
+                    >
+                      {label}
+                    </span>
+                    {/* Accent underline */}
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: "2.5rem" }}
+                      transition={{ delay: 1.2 + i * 0.15, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                      style={{ height: "2px", backgroundColor: "#e8c547", borderRadius: "1px" }}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+        {/* ── FRONT LAYER (VLOGS & Buttons) ── */}
+        <motion.div
+        className="hero-content-wrapper"
+        style={{ y: contentY, opacity: fadeOut, width: "100%", gridArea: "1/1", zIndex: 4 }}
+      >
+        <div className="site-container hero-site-container">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}
+            className="hero-main-content"
+          >
+            {/* Label pill removed per user request, empty div preserves animation stagger index */}
+            <motion.div variants={fadeUp} style={{ display: "none" }} />
+
+            {/* ── MEGA HEADLINE — full width ── */}
+            <div aria-label="Crafting Bold Stories" style={{ display: "flex", flexDirection: "column", marginTop: "3.5rem" }}>
+              <div style={{ overflow: "hidden" }}>
+                <motion.span variants={lineVariants} className="text-mega" style={{
+                  fontFamily: "var(--font-antonio), sans-serif",
+                  fontWeight: 900, color: "#ffffff", visibility: "hidden",
                   textTransform: "uppercase", display: "block",
                 }}>
                   SIRIL
@@ -313,7 +509,7 @@ export default function HeroSection() {
                     borderRadius: "9999px", textDecoration: "none",
                     transition: "border-color 0.2s, color 0.2s",
                   }}
-                  whileHover={{ borderColor: "#e8c547", color: "#ffffff", scale: 1.03 }}
+                  whileHover={{ borderColor: "#e8c547", color: "#ffffff", visibility: "hidden", scale: 1.03 }}
                   whileTap={{ scale: 0.96 }}
                 >
                   My Channel <ArrowRight size={13} />
@@ -356,7 +552,7 @@ export default function HeroSection() {
                         fontFamily: "var(--font-antonio), sans-serif",
                         fontSize: "clamp(3.5rem, 8vw, 7rem)",
                         fontWeight: 700,
-                        color: "#ffffff",
+                        color: "#ffffff", visibility: "hidden",
                         lineHeight: 1,
                         letterSpacing: "-0.02em",
                       }}
@@ -389,6 +585,7 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </motion.div>
+      </div>
 
       {/* ── Scroll hint ── */}
       <motion.div
@@ -417,6 +614,7 @@ export default function HeroSection() {
 
       {/* ── Bottom border ── */}
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "1px", backgroundColor: "#1f1f1f" }} />
+      </div>
     </section>
   );
 }

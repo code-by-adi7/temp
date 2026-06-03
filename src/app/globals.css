@@ -85,6 +85,16 @@ html {
 ::-webkit-scrollbar-thumb  { background: #3a3a3a; border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: #e8c547; }
 
+/* ─── HERO SECTION SCROLL PADDING ─── */
+.hero-section {
+  min-height: 100vh;
+}
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 200vh; /* Decreases scroll sensitivity by requiring 2x swipe distance */
+  }
+}
+
 /* ─── MEGA TEXT UTILITY ─── */
 .text-mega {
   font-size: clamp(5rem, 15vw, 14rem);

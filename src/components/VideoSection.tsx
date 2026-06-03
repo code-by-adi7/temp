@@ -236,7 +236,7 @@ export default function VideoSection() {
       />
 
       {/* Section Header */}
-      <div className="site-container">
+      <div className="site-container" style={{ position: "relative", zIndex: 1 }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -356,6 +356,8 @@ export default function VideoSection() {
         ref={trackRef}
         onScroll={updateScrollState}
         style={{
+          position: "relative",
+          zIndex: 1,
           display: "flex",
           gap: "2rem",
           overflowX: "auto",
