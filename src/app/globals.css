@@ -76,6 +76,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden; /* prevent horizontal scroll that hides hamburger */
 }
 
 /* ─── CUSTOM SCROLLBAR ─── */
@@ -211,14 +212,12 @@ body {
   padding-right: max(var(--site-gutter), env(safe-area-inset-right));
 }
 
-/* ── Touch tap targets — min 44×44px ── */
+/* ── Touch tap targets — min 44px HEIGHT only (no min-width that breaks nav layout) ── */
 a, button {
   min-height: 44px;
-  min-width: 44px;
 }
-nav a {
+nav a, nav button {
   min-height: unset;
-  min-width: unset;
 }
 
 /* ── Prevent text size adjust on mobile rotate ── */
@@ -252,10 +251,42 @@ html {
     --site-gutter: 1.25rem;
   }
 
-  /* Hero section */
+  /* Hero: full viewport height, stretch so content can fill vertically */
   #hero {
-    padding-top: 4rem !important;
-    align-items: flex-start !important;
+    padding-top: 5rem  !important;
+    padding-bottom: 2.5rem !important;
+    align-items: stretch !important;
+    min-height: 100svh !important;
+  }
+
+  /* Stretch wrappers so flex auto margin works */
+  .hero-content-wrapper,
+  .hero-site-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .hero-main-content {
+    flex: 1;
+  }
+
+  /* Push buttons and body to the bottom */
+  .hero-buttons-row {
+    margin-top: auto;
+  }
+
+  /* Stats hidden in hero on mobile — they appear too low */
+  .hero-stats {
+    display: none !important;
+  }
+
+  /* Headline: less top margin on mobile, increase font size */
+  .hero-main-content > [aria-label="Crafting Bold Stories"] {
+    margin-top: 1rem !important;
+  }
+  .hero-main-content .text-mega {
+    font-size: clamp(4.5rem, 25vw, 8rem) !important;
   }
 
   /* Video section */
@@ -399,3 +430,23 @@ html {
   outline-offset: 3px;
   border-radius: 4px;
 }
+
+/* ── Hero character image — mobile: bottom center ── */
+@media (max-width: 639px) {
+  .hero-char {
+    left:   0    !important;   /* span full width */
+    right:  0    !important;
+    bottom: 0    !important;   /* pin to bottom of hero */
+    top:    auto !important;
+    height: 65%  !important;
+    width:  100% !important;
+    /* No side-fade mask needed — image is centered */
+    -webkit-mask-image: none !important;
+    mask-image:         none !important;
+  }
+
+  .hero-char img {
+    object-position: bottom center !important;  /* person centered */
+  }
+}
+

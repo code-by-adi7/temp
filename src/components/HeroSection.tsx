@@ -9,6 +9,7 @@ import {
   useMotionValue,
 } from "framer-motion";
 import { Play, ArrowRight } from "lucide-react";
+import WaterRippleCanvas from "@/components/WaterRippleCanvas";
 
 /* ─── Stagger variants ─── */
 const containerVariants = {
@@ -95,11 +96,10 @@ export default function HeroSection() {
     offset: ["start start", "end start"],
   });
 
-  const blobY1   = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "55%"]), { stiffness: 55, damping: 18 });
-  const blobY2   = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "38%"]), { stiffness: 55, damping: 18 });
+  const gridY = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "28%"]), { stiffness: 50, damping: 18 });
+  const charY = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "12%"]), { stiffness: 60, damping: 20 });
   const contentY = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "18%"]), { stiffness: 75, damping: 22 });
-  const gridY    = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "28%"]), { stiffness: 50, damping: 18 });
-  const fadeOut  = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  const fadeOut = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
   const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.07], [1, 0]);
 
   const mag1 = useMagnetic(0.38);
@@ -107,8 +107,8 @@ export default function HeroSection() {
 
   const stats = [
     { target: 200, suffix: "+", label: "Subscribers" },
-    { target: 500,   suffix: "k+", label: "Total Views"  },
-    { target: 50, suffix: "+",  label: "Videos Made"  },
+    { target: 500, suffix: "k+", label: "Total Views" },
+    { target: 50, suffix: "+", label: "Videos Made" },
   ];
 
   return (
@@ -123,66 +123,83 @@ export default function HeroSection() {
         paddingTop: "12rem",
         paddingBottom: "6rem",
         overflow: "hidden",
-        backgroundColor: "#080808",
+        backgroundColor: "#000000ff",
       }}
     >
-      {/* ── Dot grid background ── */}
+      {/* ── z0: Dot grid ── */}
       <motion.div
+        aria-hidden
         style={{
           y: gridY,
           position: "absolute",
           inset: "-20%",
-          backgroundImage: "radial-gradient(circle, rgba(181, 192, 155, 0.26) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, rgba(232,197,71,0.22) 1px, transparent 1px)",
           backgroundSize: "44px 44px",
           pointerEvents: "none",
           zIndex: 0,
         }}
       />
 
-      {/* ── Blob 1 — top right ── */}
-      <motion.div style={{
-        y: blobY1,
-        position: "absolute", top: "-10%", right: "-5%",
-        width: "clamp(400px, 55vw, 800px)", height: "clamp(400px, 55vw, 800px)",
-        borderRadius: "50%",
-        background: "radial-gradient(circle at 40% 40%, rgba(232,197,71,0.13), transparent 70%)",
-        filter: "blur(80px)", pointerEvents: "none", zIndex: 0,
-      }} />
+      {/* ── z1: WebGL water ripple (transparent gold overlay) ── */}
+      <WaterRippleCanvas />
 
-      {/* ── Blob 2 — bottom left ── */}
-      <motion.div style={{
-        y: blobY2,
-        position: "absolute", bottom: "0%", left: "-8%",
-        width: "clamp(300px, 40vw, 560px)", height: "clamp(300px, 40vw, 560px)",
-        borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(232,197,71,0.07), transparent 65%)",
-        filter: "blur(100px)", pointerEvents: "none", zIndex: 0,
-      }} />
-
-      {/* ── Pulsing center glow ── */}
+      {/* ── z1: mn.png character — right side ── */}
       <motion.div
-        animate={{ scale: [1, 1.1, 1], opacity: [0.25, 0.75, 0.25] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        aria-hidden
+        className="hero-char"
         style={{
-          position: "absolute", top: "40%", left: "50%",
-          transform: "translate(-50%,-50%)",
-          width: "clamp(300px, 60vw, 700px)", height: "clamp(150px, 25vw, 320px)",
-          borderRadius: "50%",
-          background: "radial-gradient(ellipse, rgba(232,197,71,0.05), transparent 70%)",
-          filter: "blur(60px)", pointerEvents: "none", zIndex: 0,
+          y: charY,
+          position: "absolute",
+          right: 0,
+          bottom: 0,
+          height: "100%",
+          width: "clamp(280px, 45vw, 680px)",
+          pointerEvents: "none",
+          zIndex: 1,
+          /* gradient mask: fades left edge into transparent */
+          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 28%)",
+          maskImage: "linear-gradient(to right, transparent 0%, black 28%)",
         }}
-      />
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/mn.png"
+          alt="Sanu Siril"
+          style={{
+            height: "100%",
+            width: "100%",
+            objectFit: "contain",
+            objectPosition: "bottom right",
+            display: "block",
+            userSelect: "none",
+            WebkitUserDrag: "none",
+          } as React.CSSProperties}
+        />
+      </motion.div>
+
+      {/* ── z2: Edge vignettes (left & top) ── */}
+      <div aria-hidden style={{
+        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 2,
+        background: "linear-gradient(to right, rgba(8,8,8,0.5) 0%, transparent 45%)",
+      }} />
+      <div aria-hidden style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: "200px",
+        background: "linear-gradient(to bottom, rgba(8,8,8,0.6), transparent)",
+        pointerEvents: "none", zIndex: 2,
+      }} />
 
       {/* ── MAIN CONTENT ── */}
       <motion.div
-        style={{ y: contentY, opacity: fadeOut, width: "100%", position: "relative", zIndex: 1 }}
+        className="hero-content-wrapper"
+        style={{ y: contentY, opacity: fadeOut, width: "100%", position: "relative", zIndex: 2 }}
       >
-        <div className="site-container">
+        <div className="site-container hero-site-container">
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}
+            className="hero-main-content"
           >
             {/* Label pill */}
             <motion.div variants={fadeUp}>
@@ -200,7 +217,7 @@ export default function HeroSection() {
                   animate={{ rotate: [0, 18, -18, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
                 >
-                
+
                 </motion.div>
                 <span style={{
                   fontFamily: "var(--font-dm-mono), monospace",
@@ -208,13 +225,13 @@ export default function HeroSection() {
                   letterSpacing: "0.22em",
                   textTransform: "uppercase", color: "#e8c547",
                 }}>
-                 
+
                 </span>
               </motion.div>
             </motion.div>
 
             {/* ── MEGA HEADLINE — full width ── */}
-            <div aria-label="Crafting Bold Stories" style={{ display: "flex", flexDirection: "column" }}>
+            <div aria-label="Crafting Bold Stories" style={{ display: "flex", flexDirection: "column", marginTop: "3.5rem" }}>
               <div style={{ overflow: "hidden" }}>
                 <motion.span variants={lineVariants} className="text-mega" style={{
                   fontFamily: "var(--font-antonio), sans-serif",
@@ -241,7 +258,7 @@ export default function HeroSection() {
                   fontWeight: 700, color: "#e8c547",
                   textTransform: "uppercase", display: "block",
                 }}>
-                
+
                 </motion.span>
               </div>
             </div>
@@ -249,6 +266,7 @@ export default function HeroSection() {
             {/* ── BODY + BUTTONS row ── */}
             <motion.div
               variants={fadeUp}
+              className="hero-buttons-row"
               style={{
                 display: "flex",
                 flexWrap: "wrap",
@@ -266,9 +284,7 @@ export default function HeroSection() {
                 margin: 0,
                 flex: "1 1 260px",
               }}>
-                Real moments. Raw emotions. Cinematic frames.
-                Every video is a chapter — and you&apos;re invited to be
-                part of the journey. Join 100K+ viewers already on board.
+
               </p>
 
               {/* CTA Buttons */}
@@ -317,8 +333,8 @@ export default function HeroSection() {
               </div>
             </motion.div>
 
-            {/* ── STATS — BIG NUMBERS ── */}
-            <motion.div variants={fadeUp}>
+            {/* ── STATS — hidden on mobile, shown on sm+ ── */}
+            <motion.div variants={fadeUp} className="hero-stats hidden sm:block">
               {/* Divider */}
               <div style={{ width: "100%", height: "1px", backgroundColor: "#1f1f1f", marginBottom: "2.5rem" }} />
 
