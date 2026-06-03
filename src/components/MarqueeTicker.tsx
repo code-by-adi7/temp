@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 export default function MarqueeTicker() {
   const text =
     "TRAVEL VLOGGER • FOOD • LIFESTYLE • STORYTELLER • CINEMATIC VLOGS • VISUAL STORIES • ";
@@ -16,11 +20,13 @@ export default function MarqueeTicker() {
         borderBottom: "1px solid #c9a930",
       }}
     >
-      <div
+      <motion.div
+        initial={{ x: 0 }}
+        animate={{ x: "-50%" }}
+        transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
         style={{
           display: "flex",
           whiteSpace: "nowrap",
-          animation: "marquee 20s linear infinite",
           willChange: "transform",
         }}
       >
@@ -47,7 +53,8 @@ export default function MarqueeTicker() {
         >
           {repeated}
         </span>
-      </div>
+      </motion.div>
     </div>
   );
 }
+

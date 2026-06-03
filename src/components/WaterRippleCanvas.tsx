@@ -28,14 +28,17 @@ const SIM_FS = /* glsl */ `
   uniform vec2      u_mouse;
   uniform float     u_splash;
 
-  void main() {
-    float c = texture2D(u_curr, v_uv).r;
-    float p = texture2D(u_prev, v_uv).r;
+  float un(float x) { return x * 2.0 - 1.0; }
+  float pk(float x) { return x * 0.5 + 0.5; }
 
-    float n = texture2D(u_curr, v_uv + vec2(0.0,    u_px.y)).r;
-    float s = texture2D(u_curr, v_uv - vec2(0.0,    u_px.y)).r;
-    float e = texture2D(u_curr, v_uv + vec2(u_px.x, 0.0   )).r;
-    float w = texture2D(u_curr, v_uv - vec2(u_px.x, 0.0   )).r;
+  void main() {
+    float c = un(texture2D(u_curr, v_uv).r);
+    float p = un(texture2D(u_prev, v_uv).r);
+
+    float n = un(texture2D(u_curr, v_uv + vec2(0.0,    u_px.y)).r);
+    float s = un(texture2D(u_curr, v_uv - vec2(0.0,    u_px.y)).r);
+    float e = un(texture2D(u_curr, v_uv + vec2(u_px.x, 0.0   )).r);
+    float w = un(texture2D(u_curr, v_uv - vec2(u_px.x, 0.0   )).r);
 
     float next = (n + s + e + w) * 0.5 - p;
     next *= u_damp;
@@ -43,7 +46,7 @@ const SIM_FS = /* glsl */ `
     float d = distance(v_uv, u_mouse);
     next   += u_splash * max(0.0, 1.0 - d / 0.04);
 
-    gl_FragColor = vec4(clamp(next, -1.0, 1.0), 0.0, 0.0, 1.0);
+    gl_FragColor = vec4(pk(clamp(next, -1.0, 1.0)), 0.0, 0.0, 1.0);
   }
 `;
 
@@ -58,16 +61,11 @@ const RENDER_FS = /* glsl */ `
   uniform sampler2D u_height;
   uniform vec2      u_px;
 
+  float un(float x) { return x * 2.0 - 1.0; }
+
   void main() {
-    float h  = texture2D(u_height, v_uv).r;
+    float h  = un(texture2D(u_height, v_uv).r);
 
-    // Surface normal from neighbours
-    float hL = texture2D(u_height, v_uv - vec2(u_px.x, 0.0)).r;
-    float hR = texture2D(u_height, v_uv + vec2(u_px.x, 0.0)).r;
-    float hD = texture2D(u_height, v_uv - vec2(0.0,    u_px.y)).r;
-    float hU = texture2D(u_height, v_uv + vec2(0.0,    u_px.y)).r;
-
-    // Specular on crests, subtle shadow in troughs
     float spec   = smoothstep(0.0, 0.25, h)  * 0.65;
     float shadow = smoothstep(0.0, 0.25, -h) * 0.30;
 
@@ -171,20 +169,30 @@ export default function WaterRippleCanvas() {
     /* ping-pong state */
     const SIM_SCALE = 3; // simulate at 1/3 res for performance
     let simW = 1, simH = 1;
-    let tex0: WebGLTexture, tex1: WebGLTexture;
-    let fbo0: WebGLFramebuffer, fbo1: WebGLFramebuffer;
+    let texs: WebGLTexture[] = [];
+    let fbos: WebGLFramebuffer[] = [];
+    let frameIdx = 0;
 
     const allocFBOs = (w: number, h: number) => {
       simW = Math.max(1, Math.floor(w / SIM_SCALE));
       simH = Math.max(1, Math.floor(h / SIM_SCALE));
-      if (tex0) gl.deleteTexture(tex0);
-      if (tex1) gl.deleteTexture(tex1);
-      if (fbo0) gl.deleteFramebuffer(fbo0);
-      if (fbo1) gl.deleteFramebuffer(fbo1);
-      tex0 = mkTex(gl, simW, simH);
-      tex1 = mkTex(gl, simW, simH);
-      fbo0 = mkFBO(gl, tex0);
-      fbo1 = mkFBO(gl, tex1);
+      
+      texs.forEach(t => gl.deleteTexture(t));
+      fbos.forEach(f => gl.deleteFramebuffer(f));
+      texs = [];
+      fbos = [];
+
+      for(let i=0; i<3; i++) {
+        const t = mkTex(gl, simW, simH);
+        const f = mkFBO(gl, t);
+        texs.push(t);
+        fbos.push(f);
+
+        // Initialize to neutral 0.5 (which un-packs to 0.0)
+        gl.bindFramebuffer(gl.FRAMEBUFFER, f);
+        gl.clearColor(0.5, 0.5, 0.5, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+      }
     };
 
     const ro = new ResizeObserver(() => {
@@ -212,16 +220,14 @@ export default function WaterRippleCanvas() {
     };
 
     const onMM  = (e: MouseEvent) => onMove(e.clientX, e.clientY);
-    const onTM  = (e: TouchEvent) => { e.preventDefault(); onMove(e.touches[0].clientX, e.touches[0].clientY); };
+    const onTM  = (e: TouchEvent) => { onMove(e.touches[0].clientX, e.touches[0].clientY); };
     const onML  = () => { splash = 0; };
 
-    canvas.addEventListener("mousemove",  onMM);
-    canvas.addEventListener("touchmove",  onTM, { passive: false });
-    canvas.addEventListener("mouseleave", onML);
+    window.addEventListener("mousemove",  onMM);
+    window.addEventListener("touchmove",  onTM, { passive: true });
+    window.addEventListener("mouseleave", onML);
 
     /* render loop */
-    let ping = true;
-
     const draw = () => {
       rafRef.current = requestAnimationFrame(draw);
 
@@ -237,9 +243,13 @@ export default function WaterRippleCanvas() {
 
       gl.viewport(0, 0, simW, simH);
 
-      const currT = ping ? tex0 : tex1;
-      const prevT = ping ? tex1 : tex0;
-      const dstF  = ping ? fbo1 : fbo0;
+      const currIdx = frameIdx % 3;
+      const prevIdx = (frameIdx + 2) % 3; // (idx - 1)
+      const nextIdx = (frameIdx + 1) % 3;
+
+      const currT = texs[currIdx];
+      const prevT = texs[prevIdx];
+      const dstF  = fbos[nextIdx];
 
       gl.bindFramebuffer(gl.FRAMEBUFFER, dstF);
       gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, currT); gl.uniform1i(sU.curr, 0);
@@ -251,7 +261,7 @@ export default function WaterRippleCanvas() {
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
       splash *= 0.82;
-      ping = !ping;
+      frameIdx++;
 
       /* --- render pass --- */
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -264,7 +274,7 @@ export default function WaterRippleCanvas() {
       gl.enableVertexAttribArray(rp);
       gl.vertexAttribPointer(rp, 2, gl.FLOAT, false, 0, 0);
 
-      const htTex = ping ? tex0 : tex1;
+      const htTex = texs[nextIdx];
       gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, htTex); gl.uniform1i(rU.height, 0);
       gl.uniform2f(rU.px, 1 / simW, 1 / simH);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -275,16 +285,14 @@ export default function WaterRippleCanvas() {
     return () => {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
-      canvas.removeEventListener("mousemove",  onMM);
-      canvas.removeEventListener("touchmove",  onTM);
-      canvas.removeEventListener("mouseleave", onML);
+      window.removeEventListener("mousemove",  onMM);
+      window.removeEventListener("touchmove",  onTM);
+      window.removeEventListener("mouseleave", onML);
       gl.deleteProgram(simProg);
       gl.deleteProgram(renProg);
       gl.deleteBuffer(quad);
-      if (tex0) gl.deleteTexture(tex0);
-      if (tex1) gl.deleteTexture(tex1);
-      if (fbo0) gl.deleteFramebuffer(fbo0);
-      if (fbo1) gl.deleteFramebuffer(fbo1);
+      texs.forEach(t => gl.deleteTexture(t));
+      fbos.forEach(f => gl.deleteFramebuffer(f));
     };
   }, []);
 
@@ -298,7 +306,7 @@ export default function WaterRippleCanvas() {
         height: "100%",
         display: "block",
         touchAction: "none",
-        pointerEvents: "auto",
+        pointerEvents: "none",
       }}
       aria-hidden="true"
     />

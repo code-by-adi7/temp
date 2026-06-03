@@ -81,44 +81,44 @@ export default function Footer() {
 
         <div className="divider" style={{ marginBottom: "3rem" }} />
 
-        {/* Mega text */}
-        <motion.div
-          variants={megaTextVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          style={{ display: "flex", flexDirection: "column", marginBottom: "3rem", overflow: "hidden" }}
-        >
-          <motion.div variants={lineVariant} style={{ overflow: "hidden" }}>
-            <span
-              className="text-mega"
-              style={{
-                fontFamily: "var(--font-antonio), sans-serif",
-                fontWeight: 700,
-                color: "#ffffff",
-                textTransform: "uppercase",
-                display: "block",
-              }}
-            >
-              SANU
-            </span>
+        {/* Mega text Marquee */}
+        <div style={{ marginBottom: "3rem", overflow: "hidden", display: "flex", whiteSpace: "nowrap" }}>
+          <motion.div
+            initial={{ x: 0 }}
+            animate={{ x: "-50%" }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 15 }}
+            style={{ display: "flex", width: "max-content" }}
+          >
+            {[...Array(4)].map((_, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", paddingRight: "3rem" }}>
+                <span
+                  className="text-mega"
+                  style={{
+                    fontFamily: "var(--font-antonio), sans-serif",
+                    fontWeight: 700,
+                    color: "#ffffff",
+                    textTransform: "uppercase",
+                    marginRight: "3rem",
+                  }}
+                >
+                  SIRIL
+                </span>
+                <span
+                  className="text-mega"
+                  style={{
+                    fontFamily: "var(--font-antonio), sans-serif",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    WebkitTextStroke: "2px #3a3a3a",
+                    color: "transparent",
+                  }}
+                >
+                  VLOGS
+                </span>
+              </div>
+            ))}
           </motion.div>
-          <motion.div variants={lineVariant} style={{ overflow: "hidden" }}>
-            <span
-              className="text-mega"
-              style={{
-                fontFamily: "var(--font-antonio), sans-serif",
-                fontWeight: 700,
-                textTransform: "uppercase",
-                display: "block",
-                WebkitTextStroke: "1px #f0f0f0",
-                color: "transparent",
-              }}
-            >
-              SIRIL
-            </span>
-          </motion.div>
-        </motion.div>
+        </div>
 
         <div className="divider" style={{ marginBottom: "2rem" }} />
 
