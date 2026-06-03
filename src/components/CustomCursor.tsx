@@ -49,27 +49,7 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Dot */}
-      <motion.div
-        style={{
-          x: mouseX,
-          y: mouseY,
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "8px",
-          height: "8px",
-          backgroundColor: "#e8c547",
-          borderRadius: "50%",
-          pointerEvents: "none",
-          zIndex: 999,
-          translateX: "-50%",
-          translateY: "-50%",
-          willChange: "transform",
-        }}
-        animate={{ scale: clicking ? 0.5 : 1 }}
-      />
-      {/* Ring */}
+      {/* Focus Brackets Container */}
       <motion.div
         style={{
           x: ringX,
@@ -77,18 +57,51 @@ export default function CustomCursor() {
           position: "fixed",
           top: 0,
           left: 0,
-          width: "36px",
-          height: "36px",
-          border: "1px solid rgba(232,197,71,0.4)",
-          borderRadius: "50%",
+          width: "48px",
+          height: "48px",
           pointerEvents: "none",
-          zIndex: 998,
+          zIndex: 9998,
           translateX: "-50%",
           translateY: "-50%",
           willChange: "transform",
         }}
-        animate={{ scale: clicking ? 1.4 : 1 }}
-        transition={{ scale: { duration: 0.15 } }}
+        animate={{ 
+          scale: clicking ? 0.75 : 1,
+          rotate: clicking ? 90 : 0
+        }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      >
+        {/* Top Left */}
+        <div style={{ position: "absolute", top: 0, left: 0, width: "12px", height: "12px", borderTop: "2px solid #e8c547", borderLeft: "2px solid #e8c547" }} />
+        {/* Top Right */}
+        <div style={{ position: "absolute", top: 0, right: 0, width: "12px", height: "12px", borderTop: "2px solid #e8c547", borderRight: "2px solid #e8c547" }} />
+        {/* Bottom Left */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, width: "12px", height: "12px", borderBottom: "2px solid #e8c547", borderLeft: "2px solid #e8c547" }} />
+        {/* Bottom Right */}
+        <div style={{ position: "absolute", bottom: 0, right: 0, width: "12px", height: "12px", borderBottom: "2px solid #e8c547", borderRight: "2px solid #e8c547" }} />
+      </motion.div>
+      
+      {/* Recording Dot (Center) */}
+      <motion.div
+        style={{
+          x: mouseX,
+          y: mouseY,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "6px",
+          height: "6px",
+          backgroundColor: clicking ? "#ff3333" : "#ffffff", /* Turns red like recording when clicking */
+          borderRadius: "50%",
+          pointerEvents: "none",
+          zIndex: 9999,
+          translateX: "-50%",
+          translateY: "-50%",
+          willChange: "transform",
+          boxShadow: clicking ? "0 0 10px rgba(255,51,51,0.8)" : "none",
+        }}
+        animate={{ scale: clicking ? 1.5 : 1 }}
+        transition={{ type: "spring", stiffness: 500, damping: 15 }}
       />
     </>
   );

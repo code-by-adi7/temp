@@ -192,7 +192,22 @@ export default function Footer() {
               margin: 0,
             }}
           >
-            Made with love 🌴
+            By{" "}
+            <a
+              href="https://www.instagram.com/velvet._.syntax"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "#e8c547",
+                textDecoration: "none",
+                fontWeight: 600,
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#e8c547")}
+            >
+              Velvet Syntex
+            </a>
           </p>
         </div>
       </div>

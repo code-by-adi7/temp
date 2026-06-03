@@ -14,12 +14,24 @@ export default function FloatingElements() {
 
   // Defines a list of abstract floating shapes to scatter in the background
   const elements = [
-    { type: "circle", size: 120, x: "15%", y: "20%", duration: 15, delay: 0 },
-    { type: "plus", size: 40, x: "85%", y: "10%", duration: 20, delay: 2 },
-    { type: "circle", size: 80, x: "75%", y: "60%", duration: 18, delay: 1 },
-    { type: "square", size: 60, x: "10%", y: "70%", duration: 25, delay: 3 },
-    { type: "crosshair", size: 90, x: "50%", y: "40%", duration: 22, delay: 0.5 },
-    { type: "plus", size: 30, x: "30%", y: "85%", duration: 12, delay: 4 },
+    { type: "circle", size: 120, x: "15%", y: "5%", duration: 15, delay: 0 },
+    { type: "plus", size: 40, x: "85%", y: "8%", duration: 20, delay: 2 },
+    { type: "triangle", size: 55, x: "35%", y: "15%", duration: 18, delay: 1.2 },
+    { type: "crosshair", size: 90, x: "50%", y: "25%", duration: 22, delay: 0.5 },
+    { type: "square", size: 60, x: "10%", y: "30%", duration: 25, delay: 3 },
+    { type: "plus", size: 25, x: "65%", y: "38%", duration: 16, delay: 2.8 },
+    { type: "circle", size: 80, x: "75%", y: "45%", duration: 18, delay: 1 },
+    { type: "triangle", size: 70, x: "85%", y: "52%", duration: 20, delay: 1.5 },
+    { type: "plus", size: 30, x: "20%", y: "55%", duration: 12, delay: 4 },
+    { type: "crosshair", size: 110, x: "80%", y: "65%", duration: 24, delay: 2.5 },
+    { type: "circle", size: 45, x: "5%", y: "68%", duration: 15, delay: 0.2 },
+    { type: "square", size: 45, x: "40%", y: "75%", duration: 16, delay: 1.5 },
+    { type: "triangle", size: 60, x: "60%", y: "82%", duration: 19, delay: 3.1 },
+    { type: "circle", size: 95, x: "15%", y: "85%", duration: 21, delay: 3.5 },
+    { type: "crosshair", size: 50, x: "35%", y: "90%", duration: 14, delay: 1.1 },
+    { type: "plus", size: 50, x: "90%", y: "92%", duration: 19, delay: 0.8 },
+    { type: "square", size: 35, x: "60%", y: "96%", duration: 14, delay: 2.2 },
+    { type: "circle", size: 70, x: "25%", y: "98%", duration: 18, delay: 0.5 },
   ];
 
   return (
@@ -78,6 +90,11 @@ export default function FloatingElements() {
               <line x1="2" y1="12" x2="22" y2="12"></line>
             </svg>
           )}
+          {el.type === "triangle" && (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" style={{ width: "100%", height: "100%" }}>
+              <polygon points="12 4 4 20 20 20"></polygon>
+            </svg>
+          )}
         </motion.div>
       ))}
 
@@ -116,6 +133,25 @@ export default function FloatingElements() {
           height: "50vw",
           background: "radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)",
           filter: "blur(80px)",
+          borderRadius: "50%",
+        }}
+      />
+
+      <motion.div
+        animate={{
+          x: ["0%", "8%", "-8%", "0%"],
+          y: ["0%", "-10%", "5%", "0%"],
+          opacity: [0.2, 0.4, 0.2]
+        }}
+        transition={{ duration: 28, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        style={{
+          position: "absolute",
+          top: "45%",
+          left: "20%",
+          width: "35vw",
+          height: "35vw",
+          background: "radial-gradient(circle, rgba(232,197,71,0.12) 0%, transparent 70%)",
+          filter: "blur(70px)",
           borderRadius: "50%",
         }}
       />
