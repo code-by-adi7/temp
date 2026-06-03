@@ -59,7 +59,7 @@ export default function AboutSection() {
                 marginTop: "1rem",
               }}
             >
-              01
+            01
             </motion.span>
           </div>
 

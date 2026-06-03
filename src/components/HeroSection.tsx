@@ -34,12 +34,13 @@ function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const started = useRef(false);
 
   useEffect(() => {
+    // Start immediately if already in view (threshold: 0)
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !started.current) {
           started.current = true;
           let elapsed = 0;
-          const duration = 1600;
+          const duration = 1400;
           const tick = () => {
             elapsed += 16;
             const prog = Math.min(elapsed / duration, 1);
@@ -51,7 +52,7 @@ function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
           requestAnimationFrame(tick);
         }
       },
-      { threshold: 0.4 }
+      { threshold: 0, rootMargin: "0px" }
     );
     if (nodeRef.current) observer.observe(nodeRef.current);
     return () => observer.disconnect();
@@ -105,9 +106,9 @@ export default function HeroSection() {
   const mag2 = useMagnetic(0.38);
 
   const stats = [
-    { target: 100, suffix: "K+", label: "Subscribers" },
-    { target: 5,   suffix: "M+", label: "Total Views"  },
-    { target: 200, suffix: "+",  label: "Videos Made"  },
+    { target: 200, suffix: "+", label: "Subscribers" },
+    { target: 500,   suffix: "k+", label: "Total Views"  },
+    { target: 50, suffix: "+",  label: "Videos Made"  },
   ];
 
   return (
@@ -119,7 +120,8 @@ export default function HeroSection() {
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
-        paddingTop: "4rem",
+        paddingTop: "12rem",
+        paddingBottom: "6rem",
         overflow: "hidden",
         backgroundColor: "#080808",
       }}
@@ -130,7 +132,7 @@ export default function HeroSection() {
           y: gridY,
           position: "absolute",
           inset: "-20%",
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, rgba(181, 192, 155, 0.26) 1px, transparent 1px)",
           backgroundSize: "44px 44px",
           pointerEvents: "none",
           zIndex: 0,
@@ -159,7 +161,7 @@ export default function HeroSection() {
 
       {/* ── Pulsing center glow ── */}
       <motion.div
-        animate={{ scale: [1, 1.1, 1], opacity: [0.25, 0.45, 0.25] }}
+        animate={{ scale: [1, 1.1, 1], opacity: [0.25, 0.75, 0.25] }}
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
         style={{
           position: "absolute", top: "40%", left: "50%",
@@ -198,7 +200,7 @@ export default function HeroSection() {
                   animate={{ rotate: [0, 18, -18, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <Sparkles size={12} style={{ color: "#e8c547" }} />
+                
                 </motion.div>
                 <span style={{
                   fontFamily: "var(--font-dm-mono), monospace",
@@ -206,7 +208,7 @@ export default function HeroSection() {
                   letterSpacing: "0.22em",
                   textTransform: "uppercase", color: "#e8c547",
                 }}>
-                  YouTube Creator · Vlogger
+                 
                 </span>
               </motion.div>
             </motion.div>
@@ -216,21 +218,21 @@ export default function HeroSection() {
               <div style={{ overflow: "hidden" }}>
                 <motion.span variants={lineVariants} className="text-mega" style={{
                   fontFamily: "var(--font-antonio), sans-serif",
-                  fontWeight: 700, color: "#ffffff",
+                  fontWeight: 900, color: "#ffffff",
                   textTransform: "uppercase", display: "block",
                 }}>
-                  CRAFTING
+                  SIRIL
                 </motion.span>
               </div>
               <div style={{ overflow: "hidden" }}>
                 <motion.span variants={lineVariants} className="text-mega" style={{
                   fontFamily: "var(--font-antonio), sans-serif",
-                  fontWeight: 700, textTransform: "uppercase",
+                  fontWeight: 900, textTransform: "uppercase",
                   display: "block",
                   WebkitTextStroke: "1.5px #ffffff",
                   color: "transparent",
                 }}>
-                  BOLD
+                  VLOGS
                 </motion.span>
               </div>
               <div style={{ overflow: "hidden" }}>
@@ -239,7 +241,7 @@ export default function HeroSection() {
                   fontWeight: 700, color: "#e8c547",
                   textTransform: "uppercase", display: "block",
                 }}>
-                  STORIES.
+                
                 </motion.span>
               </div>
             </div>
