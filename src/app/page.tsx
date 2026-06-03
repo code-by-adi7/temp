@@ -16,6 +16,24 @@ import WelcomeScreen   from "@/components/WelcomeScreen";
 export default function Home() {
   const [entered, setEntered] = useState(false);
 
+  const handleEnter = async () => {
+    try {
+      const docEl = document.documentElement as any;
+      const requestFullscreen =
+        docEl.requestFullscreen ||
+        docEl.webkitRequestFullscreen ||
+        docEl.mozRequestFullScreen ||
+        docEl.msRequestFullscreen;
+        
+      if (requestFullscreen) {
+        await requestFullscreen.call(docEl);
+      }
+    } catch (err) {
+      console.warn("Fullscreen request failed or unsupported:", err);
+    }
+    setEntered(true);
+  };
+
   return (
     <main style={{ backgroundColor: "#080808", minHeight: "100vh" }}>
       {/* Global noise texture overlay */}
@@ -25,7 +43,7 @@ export default function Home() {
       />
 
       <AnimatePresence>
-        {!entered && <WelcomeScreen key="welcome" onEnter={() => setEntered(true)} />}
+        {!entered && <WelcomeScreen key="welcome" onEnter={handleEnter} />}
       </AnimatePresence>
 
       {entered && (
