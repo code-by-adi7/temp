@@ -11,12 +11,12 @@ export interface Video {
 export const videos: Video[] = [
   {
     id: "1",
-    youtubeId: "LXb3EKWsInQ",
-    title: "A Day in God's Own Country",
+    youtubeId: "https://youtu.be/Xnxnon_iQeM?si=CQ_Q2sDFE_yFPoNa",
+    title: "Manasa water park Mangalore with friens overview 🌊⛲🫂",
     category: "Travel Vlog",
-    duration: "12:34",
-    views: "48K",
-    thumbnail: "https://img.youtube.com/vi/LXb3EKWsInQ/maxresdefault.jpg",
+    duration: "14:40",
+    views: "1.3K",
+    thumbnail: "https://i.ytimg.com/vi/Xnxnon_iQeM/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLDHUg3XHrlFwa9NrCZ_k3Tv5x-k1w",
   },
   {
     id: "2",

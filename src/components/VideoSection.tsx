@@ -29,7 +29,7 @@ function VideoCard({ video, index }: { video: Video; index: number }) {
     >
       {/* Thumbnail */}
       <a
-        href={`https://youtube.com/watch?v=${video.youtubeId}`}
+        href={`https://youtu.be/Xnxnon_iQeM?si=CQ_Q2sDFE_yFPoNa`}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Watch ${video.title}`}
@@ -440,7 +440,7 @@ export default function VideoSection() {
       <div className="site-container block sm:hidden" style={{ marginTop: "4rem" }}>
         {/* Divider above stats */}
         <div style={{ width: "100%", height: "1px", backgroundColor: "#1f1f1f", marginBottom: "2.5rem" }} />
-        
+
         <div
           style={{
             display: "grid",
