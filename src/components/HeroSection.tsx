@@ -255,17 +255,7 @@ export default function HeroSection() {
                 gap: "2rem",
               }}
             >
-              {/* Body copy */}
-              <p style={{
-                color: "#a8a8a8",
-                fontSize: "clamp(0.9rem, 1.8vw, 1.1rem)",
-                lineHeight: 1.75,
-                maxWidth: "32rem",
-                margin: 0,
-                flex: "1 1 260px",
-              }}>
-
-              </p>
+              {/* Body copy removed */}
 
               {/* CTA Buttons */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center", flex: "0 0 auto" }}>
@@ -384,6 +374,7 @@ export default function HeroSection() {
 
       {/* ── Scroll hint ── */}
       <motion.div
+        className="scroll-hint"
         style={{
           opacity: scrollHintOpacity,
           position: "absolute", bottom: "2rem", left: "50%",
