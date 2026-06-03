@@ -75,7 +75,7 @@ const RENDER_FS = /* glsl */ `
     float activity = abs(h);
     float alpha    = smoothstep(0.008, 0.07, activity) * 0.75;
 
-    vec3 gold  = vec3(0.910, 0.773, 0.278);
+    vec3 gold  = vec3(0.032, 0.032, 0.032);
     vec3 dark  = vec3(0.032, 0.032, 0.032);
     vec3 color = gold * spec + dark * shadow;
 
@@ -120,7 +120,7 @@ function mkProgram(gl: WebGLRenderingContext, vs: string, fs: string) {
 function loadTexture(gl: WebGLRenderingContext, url: string, onLoaded?: (w: number, h: number) => void) {
   const tex = gl.createTexture()!;
   gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0,0,0,0]));
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
   const img = new Image();
   img.src = url;
   img.crossOrigin = "anonymous";
@@ -198,9 +198,9 @@ export default function WaterRippleCanvas() {
       splash: gl.getUniformLocation(simProg, "u_splash"),
     };
     const rU = {
-      height:  gl.getUniformLocation(renProg, "u_height"),
-      px:      gl.getUniformLocation(renProg, "u_px"),
-      bg:      gl.getUniformLocation(renProg, "u_bg"),
+      height: gl.getUniformLocation(renProg, "u_height"),
+      px: gl.getUniformLocation(renProg, "u_px"),
+      bg: gl.getUniformLocation(renProg, "u_bg"),
       imgRect: gl.getUniformLocation(renProg, "u_imgRect"),
     };
 
@@ -323,7 +323,7 @@ export default function WaterRippleCanvas() {
 
       // Character image tracking (sync perfectly with the actual DOM element)
       const rect = canvas.getBoundingClientRect();
-      
+
       let charW = 280;
       let charH = ch;
       let charTop = 0;
@@ -340,7 +340,7 @@ export default function WaterRippleCanvas() {
 
       const boxAspect = charW / charH;
       const imgAspect = imgW / imgH;
-      
+
       let drawW, drawH;
       if (boxAspect > imgAspect) {
         drawH = charH;
@@ -357,7 +357,7 @@ export default function WaterRippleCanvas() {
       // Convert fixed window coordinates to absolute WebGL canvas coordinates
       const canvasBoxLeft = imgWinLeft - rect.left;
       const canvasBoxBottom = rect.bottom - imgWinBottom;
-      
+
       const left = canvasBoxLeft / cw;
       const bottom = canvasBoxBottom / ch;
       const width = drawW / cw;
