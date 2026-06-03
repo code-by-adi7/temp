@@ -125,7 +125,7 @@ function mkFBO(gl: WebGLRenderingContext, tex: WebGLTexture) {
 ───────────────────────────────────────────── */
 export default function WaterRippleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef    = useRef<number>(0);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -150,20 +150,20 @@ export default function WaterRippleCanvas() {
     /* full-screen quad */
     const quad = gl.createBuffer()!;
     gl.bindBuffer(gl.ARRAY_BUFFER, quad);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
 
     /* uniform locations */
     const sU = {
-      curr:   gl.getUniformLocation(simProg, "u_curr"),
-      prev:   gl.getUniformLocation(simProg, "u_prev"),
-      px:     gl.getUniformLocation(simProg, "u_px"),
-      damp:   gl.getUniformLocation(simProg, "u_damp"),
-      mouse:  gl.getUniformLocation(simProg, "u_mouse"),
+      curr: gl.getUniformLocation(simProg, "u_curr"),
+      prev: gl.getUniformLocation(simProg, "u_prev"),
+      px: gl.getUniformLocation(simProg, "u_px"),
+      damp: gl.getUniformLocation(simProg, "u_damp"),
+      mouse: gl.getUniformLocation(simProg, "u_mouse"),
       splash: gl.getUniformLocation(simProg, "u_splash"),
     };
     const rU = {
       height: gl.getUniformLocation(renProg, "u_height"),
-      px:     gl.getUniformLocation(renProg, "u_px"),
+      px: gl.getUniformLocation(renProg, "u_px"),
     };
 
     /* ping-pong state */
@@ -176,13 +176,13 @@ export default function WaterRippleCanvas() {
     const allocFBOs = (w: number, h: number) => {
       simW = Math.max(1, Math.floor(w / SIM_SCALE));
       simH = Math.max(1, Math.floor(h / SIM_SCALE));
-      
+
       texs.forEach(t => gl.deleteTexture(t));
       fbos.forEach(f => gl.deleteFramebuffer(f));
       texs = [];
       fbos = [];
 
-      for(let i=0; i<3; i++) {
+      for (let i = 0; i < 3; i++) {
         const t = mkTex(gl, simW, simH);
         const f = mkFBO(gl, t);
         texs.push(t);
@@ -199,7 +199,7 @@ export default function WaterRippleCanvas() {
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
       if (canvas.width === w && canvas.height === h) return;
-      canvas.width  = w;
+      canvas.width = w;
       canvas.height = h;
       allocFBOs(w, h);
     });
@@ -209,22 +209,22 @@ export default function WaterRippleCanvas() {
     /* mouse / touch */
     let mUV = { x: -1, y: -1 };
     let splash = 0;
-    let lastT  = 0;
+    let lastT = 0;
 
     const onMove = (cx: number, cy: number) => {
       const r = canvas.getBoundingClientRect();
-      mUV.x = (cx - r.left)  / r.width;
+      mUV.x = (cx - r.left) / r.width;
       mUV.y = 1 - (cy - r.top) / r.height; // flip Y for WebGL
       splash = performance.now() - lastT < 80 ? 0.75 : 0.55;
-      lastT  = performance.now();
+      lastT = performance.now();
     };
 
-    const onMM  = (e: MouseEvent) => onMove(e.clientX, e.clientY);
-    const onTM  = (e: TouchEvent) => { onMove(e.touches[0].clientX, e.touches[0].clientY); };
-    const onML  = () => { splash = 0; };
+    const onMM = (e: MouseEvent) => onMove(e.clientX, e.clientY);
+    const onTM = (e: TouchEvent) => { onMove(e.touches[0].clientX, e.touches[0].clientY); };
+    const onML = () => { splash = 0; };
 
-    window.addEventListener("mousemove",  onMM);
-    window.addEventListener("touchmove",  onTM, { passive: true });
+    window.addEventListener("mousemove", onMM);
+    window.addEventListener("touchmove", onTM, { passive: true });
     window.addEventListener("mouseleave", onML);
 
     /* render loop */
@@ -249,7 +249,7 @@ export default function WaterRippleCanvas() {
 
       const currT = texs[currIdx];
       const prevT = texs[prevIdx];
-      const dstF  = fbos[nextIdx];
+      const dstF = fbos[nextIdx];
 
       gl.bindFramebuffer(gl.FRAMEBUFFER, dstF);
       gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, currT); gl.uniform1i(sU.curr, 0);
@@ -285,8 +285,8 @@ export default function WaterRippleCanvas() {
     return () => {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
-      window.removeEventListener("mousemove",  onMM);
-      window.removeEventListener("touchmove",  onTM);
+      window.removeEventListener("mousemove", onMM);
+      window.removeEventListener("touchmove", onTM);
       window.removeEventListener("mouseleave", onML);
       gl.deleteProgram(simProg);
       gl.deleteProgram(renProg);
