@@ -28,10 +28,10 @@ export const metadata: Metadata = {
   description:
     "Official portfolio of Sanu Siril. YouTube vlogger bringing authentic stories to life through cinematic vlogging.",
   openGraph: {
-    title: "Sanu Siril — Vlogger & Creator",
+    title: "Siril — Vlogger & Creator",
     description: "YouTube vlogger. Visual storyteller. Subscribe now.",
     url: "https://youtube.com/@sanusiril",
-    siteName: "Sanu Siril",
+    siteName: "Siril",
     type: "website",
   },
 };
@@ -47,6 +47,7 @@ export default function RootLayout({
       className={`${antonio.variable} ${dmSans.variable} ${dmMono.variable}`}
     >
       <head>
+        <meta name="google-site-verification" content="qZDtS9xlejbE2yhrk6sQFRkTLmCgkepzbLzn7frBAYU" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#080808" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

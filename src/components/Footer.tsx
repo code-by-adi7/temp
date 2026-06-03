@@ -203,7 +203,7 @@ export default function Footer() {
                 fontWeight: 600,
                 transition: "color 0.2s",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#ff0000ff")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "#e8c547")}
             >
               Velvet Syntex

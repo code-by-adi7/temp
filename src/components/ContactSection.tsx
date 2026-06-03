@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { Video, Film, Globe } from "lucide-react";
 
 const socials = [
-  { icon: Video, href: "https://youtube.com/@sanusiril",  label: "YouTube"   },
-  { icon: Film,  href: "https://instagram.com/sanusiril", label: "Instagram" },
-  { icon: Globe, href: "https://twitter.com/sanusiril",   label: "Twitter"   },
+  { icon: Video, href: "https://youtube.com/@sanusiril", label: "YouTube" },
+  { icon: Film, href: "https://instagram.com/sanusiril", label: "Instagram" },
+  { icon: Globe, href: "https://twitter.com/sanusiril", label: "Twitter" },
 ];
 
 export default function ContactSection() {
@@ -78,7 +78,7 @@ export default function ContactSection() {
 
           {/* Email link */}
           <motion.a
-            href="mailto:hello@sanusiril.com"
+            href="https://www.instagram.com/siril_vlogs_"
             whileHover={{ scale: 1.02 }}
             className="text-hecto"
             style={{
@@ -99,7 +99,7 @@ export default function ContactSection() {
               e.currentTarget.style.textDecorationColor = "#3a3a3a";
             }}
           >
-            hello@sanusiril.com
+            @siril_vlogs_
           </motion.a>
 
           {/* Social Icons */}
