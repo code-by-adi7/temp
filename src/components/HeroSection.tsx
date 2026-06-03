@@ -123,7 +123,7 @@ export default function HeroSection() {
         paddingTop: "12rem",
         paddingBottom: "6rem",
         overflow: "clip",
-        backgroundColor: "#252524e1",
+        backgroundColor: "#161616ff",
       }}
     >
       {/* ── z0: Dot grid ── */}
@@ -193,6 +193,11 @@ export default function HeroSection() {
         background: "linear-gradient(to bottom, rgba(8,8,8,0.6), transparent)",
         pointerEvents: "none", zIndex: 2,
       }} />
+      <div aria-hidden style={{
+        position: "absolute", bottom: 0, left: 0, right: 0, height: "250px",
+        background: "linear-gradient(to top, rgba(8,8,8,0.9), transparent)",
+        pointerEvents: "none", zIndex: 2,
+      }} />
 
       {/* ── MAIN CONTENT ── */}
       <motion.div
@@ -255,7 +260,20 @@ export default function HeroSection() {
                 gap: "2rem",
               }}
             >
-              {/* Body copy removed */}
+              {/* Body copy restored with punchy text */}
+              <p style={{
+                color: "#a8a8a8",
+                fontFamily: "var(--font-dm-mono), monospace",
+                fontSize: "clamp(10px, 1.8vw, 12px)",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                lineHeight: 1.75,
+                maxWidth: "20rem",
+                margin: 0,
+                flex: "1 1 260px",
+              }}>
+                Capturing raw moments, cinematic stories, and the beauty of the unknown.
+              </p>
 
               {/* CTA Buttons */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center", flex: "0 0 auto" }}>

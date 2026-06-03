@@ -311,7 +311,7 @@ html {
   .hero-char img {
     position: absolute !important;
     bottom: 0 !important; /* image sits exactly at the bottom of the first 100svh screen */
-    height: 65% !important;
+    height: 85% !important;
     object-position: bottom center !important;  
   }
   .hero-main-content > [aria-label="Crafting Bold Stories"] {

@@ -16,7 +16,7 @@ export const videos: Video[] = [
     category: "Vlog",
     duration: "5:05",
     views: "50",
-    thumbnail: "https://img.youtube.com/vi/k1lgPDvhdBo/maxresdefault.jpg",
+    thumbnail: "https://i.ytimg.com/vi/k1lgPDvhdBo/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLAly_YT_GOlzar859VnXdatSNUgXg",
   },
   {
     id: "2",
@@ -25,7 +25,7 @@ export const videos: Video[] = [
     category: "Food Vlog",
     duration: "3:59",
     views: "46",
-    thumbnail: "https://img.youtube.com/vi/tWNYleK_uBg/maxresdefault.jpg",
+    thumbnail: "https://i.ytimg.com/vi/tWNYleK_uBg/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBL32nZt9Tpj8EUI95shi5kw1saqw",
   },
   {
     id: "3",

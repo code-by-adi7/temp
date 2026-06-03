@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import Navbar         from "@/components/Navbar";
 import ScrollProgress  from "@/components/ScrollProgress";
 import CustomCursor    from "@/components/CustomCursor";
+import FloatingElements from "@/components/FloatingElements";
 import HeroSection     from "@/components/HeroSection";
 import MarqueeTicker   from "@/components/MarqueeTicker";
 import VideoSection    from "@/components/VideoSection";
@@ -35,7 +36,7 @@ export default function Home() {
   };
 
   return (
-    <main style={{ backgroundColor: "#080808", minHeight: "100vh" }}>
+    <main style={{ position: "relative", backgroundColor: "#080808", minHeight: "100vh" }}>
       {/* Global noise texture overlay */}
       <div
         aria-hidden="true"
@@ -49,6 +50,7 @@ export default function Home() {
       {entered && (
         <>
           <CustomCursor />
+          <FloatingElements />
           <ScrollProgress />
           <Navbar />
           <HeroSection />
