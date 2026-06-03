@@ -4,15 +4,15 @@ import { motion } from "framer-motion";
 import { Video, Globe, Film } from "lucide-react";
 
 const footerLinks = [
-  { label: "Work",    href: "#videos"  },
-  { label: "About",   href: "#about"   },
+  { label: "Work", href: "#videos" },
+  { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
 
 const socials = [
-  { icon: Video, href: "https://youtube.com/@sanusiril",  label: "YouTube"   },
-  { icon: Film,  href: "https://instagram.com/sanusiril", label: "Instagram" },
-  { icon: Globe, href: "https://twitter.com/sanusiril",   label: "Twitter"   },
+  { icon: Video, href: "https://youtube.com/@sanusiril", label: "YouTube" },
+  { icon: Film, href: "https://instagram.com/sanusiril", label: "Instagram" },
+  { icon: Globe, href: "https://twitter.com/sanusiril", label: "Twitter" },
 ];
 
 const megaTextVariants = {
@@ -25,7 +25,7 @@ const lineVariant = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   },
 };
 

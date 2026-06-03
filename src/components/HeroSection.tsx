@@ -8,7 +8,7 @@ import {
   useSpring,
   useMotionValue,
 } from "framer-motion";
-import { Play, ArrowRight, Sparkles } from "lucide-react";
+import { Play, ArrowRight } from "lucide-react";
 
 /* ─── Stagger variants ─── */
 const containerVariants = {
@@ -19,12 +19,12 @@ const lineVariants = {
   hidden: { opacity: 0, y: 80, skewY: 3 },
   visible: {
     opacity: 1, y: 0, skewY: 0,
-    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   },
 };
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
 };
 
 /* ─── Animated counter ─── */
