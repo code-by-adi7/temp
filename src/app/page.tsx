@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import Navbar         from "@/components/Navbar";
 import ScrollProgress  from "@/components/ScrollProgress";
 import CustomCursor    from "@/components/CustomCursor";
@@ -7,8 +11,11 @@ import VideoSection    from "@/components/VideoSection";
 import AboutSection    from "@/components/AboutSection";
 import ContactSection  from "@/components/ContactSection";
 import Footer          from "@/components/Footer";
+import WelcomeScreen   from "@/components/WelcomeScreen";
 
 export default function Home() {
+  const [entered, setEntered] = useState(false);
+
   return (
     <main style={{ backgroundColor: "#080808", minHeight: "100vh" }}>
       {/* Global noise texture overlay */}
@@ -17,15 +24,23 @@ export default function Home() {
         className="noise-overlay"
       />
 
-      <CustomCursor />
-      <ScrollProgress />
-      <Navbar />
-      <HeroSection />
-      <MarqueeTicker />
-      <VideoSection />
-      <AboutSection />
-      <ContactSection />
-      <Footer />
+      <AnimatePresence>
+        {!entered && <WelcomeScreen key="welcome" onEnter={() => setEntered(true)} />}
+      </AnimatePresence>
+
+      {entered && (
+        <>
+          <CustomCursor />
+          <ScrollProgress />
+          <Navbar />
+          <HeroSection />
+          <MarqueeTicker />
+          <VideoSection />
+          <AboutSection />
+          <ContactSection />
+          <Footer />
+        </>
+      )}
     </main>
   );
 }
