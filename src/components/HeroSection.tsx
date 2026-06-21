@@ -496,13 +496,14 @@ export default function HeroSection() {
 
                     <motion.a
                       ref={mag2.ref}
-                      href="https://youtube.com/@sanusiril"
+                      href="https://www.instagram.com/siril_vlogs_"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
                         x: mag2.x, y: mag2.y,
                         display: "flex", alignItems: "center", gap: "0.5rem",
-                        border: "1px solid #2a2a2a", color: "#f0f0f0",
+                        backgroundColor: "#e8c547ab", color: "#080808",
+
                         fontFamily: "var(--font-dm-mono), monospace",
                         fontSize: "clamp(9px, 1.5vw, 11px)",
                         letterSpacing: "0.15em", textTransform: "uppercase",
@@ -510,10 +511,10 @@ export default function HeroSection() {
                         borderRadius: "9999px", textDecoration: "none",
                         transition: "border-color 0.2s, color 0.2s",
                       }}
-                      whileHover={{ borderColor: "#e8c547", color: "#ffffff", scale: 1.03 }}
+                      whileHover={{ borderColor: "#000000ff", color: "#000000ff", scale: 1.03, boxShadow: "0 0 32px rgba(232,197,71,0.45)" }}
                       whileTap={{ scale: 0.96 }}
                     >
-                      My Channel <ArrowRight size={13} />
+                      Instagram <ArrowRight size={13} />
                     </motion.a>
                   </div>
                 </motion.div>
