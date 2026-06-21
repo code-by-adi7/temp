@@ -305,7 +305,7 @@ export default function HeroSection() {
 
                     <motion.a
                       ref={mag2.ref}
-                      href="https://youtube.com/@sanusiril"
+                      href="https://www.instagram.com/siril_vlogs_"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
@@ -322,7 +322,7 @@ export default function HeroSection() {
                       whileHover={{ borderColor: "#e8c547", color: "#ffffff", scale: 1.03 }}
                       whileTap={{ scale: 0.96 }}
                     >
-                      My Channel <ArrowRight size={13} />
+                      Instagaram <ArrowRight size={13} />
                     </motion.a>
                   </div>
                 </motion.div>
